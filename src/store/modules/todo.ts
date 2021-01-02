@@ -7,7 +7,7 @@ import store from '@/store'
 import axios from 'axios'
 
 // Set global axios defaults
-axios.defaults.baseURL = process.env.VUE_APP_API_ENDPOINT
+axios.defaults.baseURL = '/api'
 axios.defaults.headers.common = { 'Authorization': `${process.env.VUE_APP_API_TOKEN}` }
 
 // Helpers

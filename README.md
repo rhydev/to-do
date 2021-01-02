@@ -1,24 +1,34 @@
-# to-do
 
-## Project setup
-```
+# todolist
+A todo app made with Vue, Vuetify, and Typescript.
+
+## Setup
+
+### Requirements
+- [Git](https://git-scm.com/downloads)
+- [Node](https://nodejs.org/en/)
+- [yarn](https://yarnpkg.com/getting-started/install)
+
+### Installation
+```bash
+# Clone the repo
+git clone https://github.com/rhydev/todolist.git
+# Enter the app folder
+cd todolist
+# Install dependencies
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Configuration
+Rename `.env.example` to `.env` and add your authentication token like so.
 ```
-yarn serve
+VUE_APP_API_TOKEN=YOUR_API_TOKEN
 ```
 
-### Compiles and minifies for production
-```
+### Running
+```bash
+# Compiles and hot-reloads for development
+yarn serve
+# Compiles and minifies for production
 yarn build
 ```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
