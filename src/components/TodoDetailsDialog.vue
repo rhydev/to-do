@@ -15,57 +15,62 @@
       :style="{ 'border-radius': $vuetify.breakpoint.mdAndUp ? '4px' : '0px' }"
       color="primary"
     >
-      <div v-if="!todoModule.editing">
-        <v-card-title
-          :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }"
-          class="white--text"
-        >
-          <span v-text="currentTodo.title" />
-        </v-card-title>
-        <v-card-text
-          :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }"
-          class="white--text"
-        >
-          <span v-text="currentTodo.content" />
-        </v-card-text>
-      </div>
-      <v-form
-        v-else
-        v-model="valid"
-        class="fix-padding"
+      <transition
+        name="fade"
+        mode="out-in"
       >
-        <v-card-title :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }">
-          <v-textarea
-            v-model="currentTodo.title"
-            :rules="[ required ]"
-            color="white"
-            label="Todo Title*"
-            rows="1"
-            auto-grow
-            autofocus
-            dark
-            dense
-            hide-details
-            @keydown.enter.prevent="submit"
-          />
-        </v-card-title>
-        <v-card-text
-          :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }"
+        <div v-if="!todoModule.editing">
+          <v-card-title
+            :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }"
+            class="white--text"
+          >
+            <span v-text="currentTodo.title" />
+          </v-card-title>
+          <v-card-text
+            :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }"
+            class="white--text"
+          >
+            <span v-text="currentTodo.content" />
+          </v-card-text>
+        </div>
+        <v-form
+          v-else
+          v-model="valid"
           class="fix-padding"
         >
-          <v-textarea
-            v-model="currentTodo.content"
-            color="white"
-            label="Todo Description"
-            rows="1"
-            auto-grow
-            dark
-            dense
-            hide-details
-            @keydown.enter.prevent="submit"
-          />
-        </v-card-text>
-      </v-form>
+          <v-card-title :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }">
+            <v-textarea
+              v-model="currentTodoCopy.title"
+              :rules="[ required ]"
+              color="white"
+              label="Todo Title*"
+              rows="1"
+              auto-grow
+              autofocus
+              dark
+              dense
+              hide-details
+              @keydown.enter.prevent="submit"
+            />
+          </v-card-title>
+          <v-card-text
+            :class="{ 'dialog-text': $vuetify.breakpoint.mdAndUp }"
+            class="fix-padding"
+          >
+            <v-textarea
+              v-model="currentTodoCopy.content"
+              color="white"
+              label="Todo Description"
+              rows="1"
+              auto-grow
+              dark
+              dense
+              hide-details
+              @keydown.enter.prevent="submit"
+            />
+          </v-card-text>
+        </v-form>
+      </transition>
     </v-card>
 
     <!-- Floating buttons for desktop -->
@@ -115,7 +120,7 @@
           color="error"
           min-width="125px"
           depressed
-          @click="cancel"
+          @click="todoModule.setEditing(false)"
         >
           <v-icon
             left
@@ -189,11 +194,6 @@ export default class TodoContainer extends Vue {
     return !!val
   }
 
-  private cancel(): void {
-    this.todoModule.setEditing(false)
-    this.todoModule.setCurrentTodo(this.currentTodoCopy)
-  }
-
   private edit(): void {
     this.currentTodoCopy = JSON.parse(JSON.stringify(this.todoModule.currentTodo))
     this.todoModule.setEditing(true)
@@ -205,7 +205,6 @@ export default class TodoContainer extends Vue {
       if (this.todoModule.editing) {
         setTimeout((): void => {
           this.todoModule.setEditing(false)
-          this.todoModule.setCurrentTodo(this.currentTodoCopy)
         }, 300)
       }
     }
@@ -216,16 +215,16 @@ export default class TodoContainer extends Vue {
       try {
         if (!this.todoModule.blocking && (this.currentTodoCopy.title !== this.currentTodo.title || this.currentTodoCopy.content !== this.currentTodo.content)) {
           await this.todoModule.editTodo({
-            id: this.currentTodo.id,
-            title: this.currentTodo.title,
-            content: this.currentTodo.content
+            id: this.currentTodoCopy.id,
+            title: this.currentTodoCopy.title,
+            content: this.currentTodoCopy.content
           })
           this.todoModule.successMsg('Successfully edited todo.')
         }
         this.todoModule.setEditing(false)
       } catch (err) {
         console.error(err)
-        this.cancel()
+        this.todoModule.setEditing(false)
         this.todoModule.errorMsg('Failed to edit todo.')
       }
     }

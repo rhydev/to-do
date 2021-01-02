@@ -128,7 +128,7 @@
         icon
         large
         depressed
-        @click="cancel"
+        @click="todoModule.setEditing(false)"
       >
         <v-icon v-text="'mdi-close'" />
       </v-btn>
@@ -165,26 +165,21 @@ export default class AppBar extends Vue {
     this.todoModule.setEditing(true)
   }
 
-  private cancel(): void {
-    this.todoModule.setEditing(false)
-    this.todoModule.setCurrentTodo(this.todoModule.currentTodoCopy)
-  }
-
   private async submit(): Promise<void> {
     if (this.todoModule.todoEditValid) {
       try {
         if (!this.todoModule.blocking && (this.todoModule.currentTodoCopy.title !== this.todoModule.currentTodo.title || this.todoModule.currentTodoCopy.content !== this.todoModule.currentTodo.content)) {
           await this.todoModule.editTodo({
-            id: this.todoModule.currentTodo.id,
-            title: this.todoModule.currentTodo.title,
-            content: this.todoModule.currentTodo.content
+            id: this.todoModule.currentTodoCopy.id,
+            title: this.todoModule.currentTodoCopy.title,
+            content: this.todoModule.currentTodoCopy.content
           })
           this.todoModule.successMsg('Successfully edited todo.')
         }
         this.todoModule.setEditing(false)
       } catch (err) {
         console.error(err)
-        this.cancel()
+        this.todoModule.setEditing(false)
         this.todoModule.errorMsg('Failed to edit todo.')
       }
     }
