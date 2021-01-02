@@ -90,18 +90,11 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
-// Components
-import TodoDetailsDialog from '@/components/TodoDetailsDialog.vue'
-
 // Store
 import { getModule } from 'vuex-module-decorators'
 import TodoModule from '@/store/modules/todo'
 
-@Component({
-  components: {
-    TodoDetailsDialog
-  }
-})
+@Component
 export default class Todo extends Vue {
   @Prop() title!: string
   @Prop() content!: string
