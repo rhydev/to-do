@@ -199,8 +199,8 @@ export default class AppBar extends Vue {
   left: 50%;
   border: 10px solid transparent;
   border-top-color: #3273DC;
-	border-bottom: 0;
-	margin-left: -10px;
-	margin-bottom: -10px;
+  border-bottom: 0;
+  margin-left: -10px;
+  margin-bottom: -10px;
 }
 </style>
