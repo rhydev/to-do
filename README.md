@@ -26,6 +26,8 @@ VUE_APP_API_TOKEN=YOUR_API_TOKEN
 ```
 
 ### Running
+>Note that this project is set up to use a webpack dev proxy server for resolving CORS issues. For production builds a proxy server would need to be created.
+
 ```bash
 # Compiles and hot-reloads for development
 yarn serve
